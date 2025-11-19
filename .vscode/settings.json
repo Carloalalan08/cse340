@@ -8,10 +8,12 @@
             },
             "ssh": "Disabled",
             "previewLimit": 50,
-            "server": "localhost",
+            "server": "postgresql://moncarloalalan08:kzw0vyvh6RxfeHwrDqnLDScbxgqlZZjf@dpg-d483enc9c44c73au5kog-a.singapore-postgres.render.com/moncarloalalan08",
             "driver": "PostgreSQL",
-            "name": "cse340",
-            "connectString": "postgresql://carloalalan08:TCzW6dXkguTLGLZ0cIB3RYK8Di0xFBcz@dpg-d41hmm9r0fns73cf4l6g-a.singapore-postgres.render.com/carloalalan08"
+            "name": "moncarlo08",
+            "database": "moncarloalalan08",
+            "username": "moncarloalalan08",
+            "connectString": "postgresql://moncarloalalan08:kzw0vyvh6RxfeHwrDqnLDScbxgqlZZjf@dpg-d483enc9c44c73au5kog-a.singapore-postgres.render.com/moncarloalalan08"
         }
     ]
 }
