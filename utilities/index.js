@@ -68,4 +68,15 @@ Util.buildVehicleDetailHTML = function (vehicle) {
   `;
 };
 
+Util.handleErrors = (fn) => {
+  return async (req, res, next) => {
+    try {
+      await fn(req, res, next)
+    } catch (error) {
+      console.error("ERROR:", error)
+      next(error) // send to your global error handler in server.js
+    }
+  }
+}
+
 module.exports = Util

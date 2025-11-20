@@ -287,6 +287,75 @@ footer {
   display: inline-block;
 }
 
+/* === Account Page === */
+.account-form {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 3px solid #00b4d8;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.account-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.account-form label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  color: #0077b6;
+}
+
+.account-form input {
+  width: 90%;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.account-form input:focus {
+  outline: none;
+  border-color: #0077b6;
+}
+
+.account-prompt {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: #222;
+}
+
+.account-prompt .cta-link {
+  color: #0077b6;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.account-prompt .cta-link:hover {
+  text-decoration: underline;
+  color: #005f8a;
+}
+
+.error-list {
+  max-width: 500px;
+  background-color: #ffebeb;
+  border: 1px solid #d00000;
+  margin: 0 20px 1rem 20px;
+  color: #d00000;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  list-style-type: disc;
+}
+
+.error-list li {
+  margin: 0.3rem 1rem;
+}
+
 /* === Error Page === */
 .error-page {
   max-width: 600px;

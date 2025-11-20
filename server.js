@@ -13,6 +13,16 @@ const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const inventoryRoute = require("./routes/inventoryRoute")
 const utilities = require("./utilities")
+const accountRoute = require("./routes/accountRoute")
+
+/* ***********************
+ * Middleware
+ *************************/
+// Parse URL-encoded bodies (as sent by HTML forms)
+app.use(express.urlencoded({ extended: true }))
+
+// Parse JSON bodies (if needed)
+app.use(express.json())
 
 /* ***********************
  * View Engine and Templates
@@ -31,6 +41,9 @@ app.get("/", baseController.buildHome)
 
 // Inventory routes
 app.use("/inv", inventoryRoute)
+
+// Account routes
+app.use("/account", accountRoute)
 
 /* ***********************
  * Local Server Information

@@ -1,0 +1,34 @@
+<h1>Register</h1>
+
+<% if (errors) { %>
+    <ul class="error-list">
+        <% errors.array().forEach(error=> { %>
+            <li>
+                <%= error.msg %>
+            </li>
+            <% }) %>
+    </ul>
+    <% } %>
+
+        <form class="account-form" action="/account/register" method="post">
+            <div class="form-group">
+                <label for="accountFirstname">First Name</label>
+                <input type="text" name="account_firstname" id="accountFirstname" required
+                    value="<%= locals.account_firstname || '' %>">
+            </div>
+            <div class="form-group">
+                <label for="accountLastname">Last Name</label>
+                <input type="text" name="account_lastname" id="accountLastname" required
+                    value="<%= locals.account_lastname || '' %>">
+            </div>
+            <div class="form-group">
+                <label for="accountEmail">Email</label>
+                <input type="email" name="account_email" id="accountEmail" required
+                    value="<%= locals.account_email || '' %>">
+            </div>
+            <div class="form-group">
+                <label for="accountPassword">Password</label>
+                <input type="password" name="account_password" id="accountPassword" required>
+            </div>
+            <button type="submit" class="cta-btn">Register</button>
+        </form>
