@@ -1,0 +1,14 @@
+<div id="wrapper">
+    <h1>Inventory Management</h1>
+
+    <% if (message) { %>
+        <div class="notice">
+            <%= message %>
+        </div>
+        <% } %>
+
+            <ul class="manage-links">
+                <li><a href="/inv/add-classification">Add Classification</a></li>
+                <li><a href="/inv/add-inventory">Add Inventory</a></li>
+            </ul>
+</div>

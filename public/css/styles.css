@@ -340,6 +340,43 @@ footer {
   color: #005f8a;
 }
 
+/* Form validity visuals */
+input:required:invalid,
+textarea:required:invalid,
+select:required:invalid {
+  border-color: #d00000;
+  box-shadow: 0 0 0 3px rgba(208, 0, 0, 0.06);
+}
+
+input:required:valid,
+textarea:required:valid,
+select:required:valid {
+  border-color: #0077b6;
+  box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.06);
+}
+
+input.valid,
+textarea.valid,
+select.valid {
+  border: 2px solid #28a745;
+  /* green */
+}
+
+input.invalid,
+textarea.invalid,
+select.invalid {
+  border: 2px solid #dc3545;
+  /* red */
+}
+
+/* small responsiveness for form container */
+.account-form {
+  max-width: 700px;
+  margin: 1.5rem auto;
+  padding: 1.25rem;
+}
+
+/* === Error List === */
 .error-list {
   max-width: 500px;
   background-color: #ffebeb;
