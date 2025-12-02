@@ -1,6 +1,9 @@
 <div id="wrapper">
     <h1>Login</h1>
-    <form action="/account/login" method="post" novalidate class="account-form">
+
+    <!-- Add the id here -->
+    <form id="loginForm" action="/account/login" method="post" novalidate class="account-form">
+
         <% if (errors && errors.length> 0) { %>
             <ul class="error-list">
                 <% errors.forEach(error=> { %>
@@ -25,7 +28,7 @@
                 <button type="submit" class="cta-btn">Login</button>
     </form>
 
-    <!-- Prompt for unregistered users -->
+<!-- Prompt to register if the user doesn't have an account -->
     <p class="account-prompt">
         Not registered yet?
         <a href="/account/register" class="cta-link">Create an account</a>

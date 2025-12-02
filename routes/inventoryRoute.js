@@ -55,6 +55,29 @@ router.get(
   utilities.handleErrors(invController.buildVehicleDetail)
 )
 
+// Return inventory JSON for a classification
+router.get(
+  "/getInventory/:classification_id",
+  utilities.handleErrors(invController.getInventoryJSON)
+)
+
+// Edit Inventory View
+router.get(
+  "/edit/:inv_id",
+  utilities.handleErrors(invController.editInventoryView)
+)
+
+// Update Inventory Handler
+router.post(
+  "/update",
+  utilities.handleErrors(invController.updateInventory)
+)
+
+router.get(
+  "/delete/:inv_id",
+  utilities.handleErrors(invController.deleteInventory)
+)
+
 // Test 500 error route
 router.get("/trigger-error", (req, res, next) => {
   next(new Error("This is a test 500 error!"))

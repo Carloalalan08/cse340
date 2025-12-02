@@ -5,4 +5,8 @@
     <p>
         <%= message %>
     </p>
+
+    <% if (env==="development" ) { %>
+        <pre><%= error.stack %></pre>
+        <% } %>
 </div>

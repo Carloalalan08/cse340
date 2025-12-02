@@ -1,5 +1,8 @@
 const invModel = require("../models/inventory-model")
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
 const Util = {}
+
 /* ************************
  * Constructs the nav HTML unordered list
  ************************** */
@@ -57,6 +60,9 @@ Util.buildClassificationGrid = async function(data){
   return grid
 }
 
+/* ***************************************
+* Build the vehicle detail view HTML
+* ************************************** */
 Util.buildVehicleDetailHTML = function (vehicle) {
   return `
     <h1>${vehicle.inv_make} ${vehicle.inv_model}</h1>
@@ -68,6 +74,9 @@ Util.buildVehicleDetailHTML = function (vehicle) {
   `;
 };
 
+/* ***************************************
+* Build the classification dropdown HTML
+* *************************************** */
 Util.buildClassificationList = async function (classification_id = null) {
   let data = await invModel.getClassifications()
   let classificationList = '<select name="classification_id" id="classificationList" required>'
@@ -83,6 +92,47 @@ Util.buildClassificationList = async function (classification_id = null) {
   return classificationList
 }
 
+/* *******************************
+ * JWT Token check middleware
+ ************************** */
+Util.checkJWTToken = (req, res, next) => {
+  if (req.cookies.jwt) {
+    jwt.verify(
+      req.cookies.jwt,
+      process.env.ACCESS_TOKEN_SECRET,
+      (err, accountData) => {
+        if (err) {
+          req.flash("notice", "Please log in")
+          res.clearCookie("jwt")
+          return res.redirect("/account/login")
+        }
+        // JWT is valid → attach user data
+        res.locals.accountData = accountData
+        res.locals.loggedin = 1
+        next()
+      }
+    )
+  } else {
+    // No token → continue as guest
+    next()
+  }
+}
+
+/* ****************************************
+ *  Check Login
+ * ************************************ */
+Util.checkLogin = (req, res, next) => {
+  if (res.locals.loggedin) {
+    next()
+  } else {
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
+}
+
+/* *******************************
+ * Error handling utility
+ ************************** */
 Util.handleErrors = (fn) => {
   return async (req, res, next) => {
     try {

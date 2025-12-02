@@ -11,4 +11,18 @@
                 <li><a href="/inv/add-classification">Add Classification</a></li>
                 <li><a href="/inv/add-inventory">Add Inventory</a></li>
             </ul>
+
+            <h2>Manage Inventory</h2>
+            <p>Select a classification to see the items belonging to it.</p>
+
+            <!-- Render the classification select dropdown -->
+            <%- classificationSelect %>
+
+                <!-- Where JS will inject the inventory rows -->
+                <table id="inventoryDisplay"></table>
+
+                <noscript>JavaScript must be enabled to use this page.</noscript>
+
+                <!-- load client-side JS -->
+                <script src="../../js/inventory.js"></script>
 </div>

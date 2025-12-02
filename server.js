@@ -19,6 +19,7 @@ const utilities = require("./utilities")
 
 const session = require("express-session")
 const flash = require("connect-flash")
+const cookieParser = require("cookie-parser")
 
 /* ***********************
  * Middleware
@@ -30,11 +31,15 @@ app.use(express.urlencoded({ extended: true }))
 // Parse JSON
 app.use(express.json())
 
+// Parse cookies
+app.use(cookieParser())
+
+// JWT Token check middleware
+app.use(utilities.checkJWTToken)
+
 /* ***********************
  * Session + Flash
  *************************/
-
-// ⚠️ IMPORTANT: Session MUST come BEFORE flash and before any route using req.flash
 app.use(session({
   secret: process.env.SESSION_SECRET || "dev_secret_change_me",
   resave: false,
@@ -85,6 +90,11 @@ app.listen(port, () => {
   console.log(`app listening on ${host}:${port}`)
 })
 
+// 404 fallback
+app.use(async (req, res, next) => {
+  next({ status: 404, message: "Sorry, we appear to have lost that page." })
+})
+
 /* ***********************
  * Error Handler (must be LAST)
  *************************/
@@ -93,13 +103,10 @@ app.use(async (err, req, res, next) => {
   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
 
   res.status(err.status || 500).render("errors/error", {
-    title: err.status || "Server Error",
-    message: err.message,
-    nav
-  })
+  title: err.status || "Server Error",
+  message: err.message || "Unexpected error",
+  error: err,
+  nav,
+  env: process.env.NODE_ENV
 })
-
-// 404 fallback
-app.use(async (req, res, next) => {
-  next({ status: 404, message: "Sorry, we appear to have lost that page." })
 })

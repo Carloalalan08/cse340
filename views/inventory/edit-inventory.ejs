@@ -1,0 +1,89 @@
+<div class="account-form">
+    <h1>Edit Inventory</h1>
+
+    <% if (errors && errors.length) { %>
+        <ul class="error-list">
+            <% errors.forEach(error=> { %>
+                <li>
+                    <%= error.msg %>
+                </li>
+                <% }) %>
+        </ul>
+        <% } %>
+
+            <!-- You MUST send inv_id back -->
+            <form action="/inv/update" method="post" novalidate>
+
+                <input type="hidden" name="inv_id" value="<%= inv_id %>">
+
+                <!-- Classification dropdown -->
+                <div class="form-group">
+                    <label for="classificationList">Classification</label>
+                    <%- classificationSelect %>
+                </div>
+
+                <!-- Make -->
+                <div class="form-group">
+                    <label for="inv_make">Make (letters and numbers)</label>
+                    <input id="inv_make" name="inv_make" type="text" pattern="^[A-Za-z0-9 ]+$" minlength="2" required
+                        value="<%= inv_make %>">
+                </div>
+
+                <!-- Model -->
+                <div class="form-group">
+                    <label for="inv_model">Model (letters and numbers)</label>
+                    <input id="inv_model" name="inv_model" type="text" pattern="^[A-Za-z0-9 ]+$" minlength="1" required
+                        value="<%= inv_model %>">
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="inv_description">Description (min. 10 characters)</label>
+                    <textarea id="inv_description" name="inv_description" minlength="10"
+                        required><%= inv_description %></textarea>
+                </div>
+
+                <!-- Image -->
+                <div class="form-group">
+                    <label for="inv_image">Image Path (/images/...)</label>
+                    <input id="inv_image" name="inv_image" type="text" pattern="^/.*" required value="<%= inv_image %>">
+                </div>
+
+                <!-- Thumbnail -->
+                <div class="form-group">
+                    <label for="inv_thumbnail">Thumbnail Path (/images/...)</label>
+                    <input id="inv_thumbnail" name="inv_thumbnail" type="text" pattern="^/.*" required
+                        value="<%= inv_thumbnail %>">
+                </div>
+
+                <!-- Price -->
+                <div class="form-group">
+                    <label for="inv_price">Price (must be greater than 0)</label>
+                    <input id="inv_price" name="inv_price" type="number" min="1" step="0.01" required
+                        value="<%= inv_price %>">
+                </div>
+
+                <!-- Year -->
+                <div class="form-group">
+                    <label for="inv_year">Year (1886 or newer)</label>
+                    <input id="inv_year" name="inv_year" type="number" min="1886" max="2099" required
+                        value="<%= inv_year %>">
+                </div>
+
+                <!-- Mileage -->
+                <div class="form-group">
+                    <label for="inv_miles">Mileage (0 or greater)</label>
+                    <input id="inv_miles" name="inv_miles" type="number" min="0" required value="<%= inv_miles %>">
+                </div>
+
+                <!-- Color -->
+                <div class="form-group">
+                    <label for="inv_color">Color (letters & spaces only)</label>
+                    <input id="inv_color" name="inv_color" type="text" pattern="^[A-Za-z ]+$" minlength="3" required
+                        value="<%= inv_color %>">
+                </div>
+
+                <button type="submit" class="cta-btn">Update Vehicle</button>
+
+            </form>
+</div>
