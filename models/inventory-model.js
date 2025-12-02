@@ -129,14 +129,16 @@ async function updateInventory(inv) {
   return result.rowCount
 }
 
+/* ***************************
+ *  Delete Inventory Data
+ * ************************** */
 async function deleteInventory(inv_id) {
   try {
-    const sql = "DELETE FROM public.inventory WHERE inv_id = $1";
-    const result = await pool.query(sql, [inv_id]);
-    return result.rowCount;
+    const sql = "DELETE FROM public.inventory WHERE inv_id = $1 RETURNING *";
+    const data = await pool.query(sql, [inv_id]);
+    return data.rows[0]; // returns the deleted row if successful
   } catch (error) {
-    console.error("deleteInventory error: " + error);
-    return 0;
+    console.error("Model error: " + error);
   }
 }
 

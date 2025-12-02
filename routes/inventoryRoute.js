@@ -73,10 +73,17 @@ router.post(
   utilities.handleErrors(invController.updateInventory)
 )
 
+// Deliver Delete Confirmation View
 router.get(
   "/delete/:inv_id",
+  utilities.handleErrors(invController.buildDeleteView)
+);
+
+// Process Delete
+router.post(
+  "/delete",
   utilities.handleErrors(invController.deleteInventory)
-)
+);
 
 // Test 500 error route
 router.get("/trigger-error", (req, res, next) => {

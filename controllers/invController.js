@@ -253,17 +253,64 @@ invController.updateInventory = async function (req, res, next) {
   }
 }
 
+/* ***************************
+ *  Delete inventory item
+ * ************************** */
 invController.deleteInventory = async function (req, res, next) {
   try {
-    const inv_id = parseInt(req.params.inv_id);
+    const inv_id = parseInt(req.body.inv_id, 10); // use req.body for POST
     const deleted = await invModel.deleteInventory(inv_id);
 
     if (deleted) {
       req.flash("notice", "Vehicle deleted successfully.");
       return res.redirect("/inv");
     } else {
-      throw new Error("Delete failed.");
+      // If delete fails, redisplay confirmation
+      const itemData = await invModel.getInventoryById(inv_id);
+      const nav = await utilities.getNav();
+
+      req.flash("notice", "Delete failed. Try again.");
+      return res.status(501).render("inventory/delete-inventory", {
+        title: `Delete ${itemData.inv_make} ${itemData.inv_model}`,
+        nav,
+        inv_id: itemData.inv_id,
+        inv_make: itemData.inv_make,
+        inv_model: itemData.inv_model,
+        inv_year: itemData.inv_year
+      });
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* ***************************
+ *  Build Delete Inventory View
+ * ************************** */
+invController.buildDeleteView = async function (req, res, next) {
+  try {
+    const inv_id = parseInt(req.params.inv_id, 10);
+    const nav = await utilities.getNav();
+    const itemData = await invModel.getInventoryById(inv_id);
+
+    if (!itemData) {
+      const error = new Error("Vehicle not found");
+      error.status = 404;
+      throw error;
+    }
+
+    const itemName = `${itemData.inv_make} ${itemData.inv_model}`;
+    res.render("inventory/delete-inventory", {
+      title: "Delete " + itemName,
+      nav,
+      inv_id: itemData.inv_id,
+      inv_make: itemData.inv_make,
+      inv_model: itemData.inv_model,
+      inv_year: itemData.inv_year,
+      inv_price: itemData.inv_price,
+      inv_miles: itemData.inv_miles,
+      inv_color: itemData.inv_color
+    });
   } catch (error) {
     next(error);
   }
