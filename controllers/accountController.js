@@ -180,7 +180,8 @@ accountController.buildAccountManagement = async function(req, res) {
   res.render("account/account", {
     title: "Account Management",
     nav,
-    errors: null
+    errors: null,
+    accountData: res.locals.accountData
   })
 }
 
@@ -192,5 +193,106 @@ accountController.logout = async function(req, res) {
   req.flash("notice", "You have been logged out.")
   return res.redirect("/account/login")
 }
+
+/* ****************************************
+ * Update account information
+ * *************************************** */
+accountController.updateAccount = async function (req, res, next) {
+  try {
+    const { account_id, account_firstname, account_lastname, account_email } = req.body
+
+    // Prevent editing another user's account
+    if (parseInt(account_id) !== res.locals.accountData.account_id) {
+      req.flash("notice", "You can only update your own account.")
+      return res.redirect("/account")
+    }
+
+    const updateResult = await accountModel.updateAccount(
+      account_id,
+      account_firstname,
+      account_lastname,
+      account_email
+    )
+
+    if (updateResult) {
+      req.flash("notice", "Account updated successfully.")
+
+      // Update JWT with new data
+      const newToken = jwt.sign(
+        {
+          account_id,
+          account_firstname,
+          account_lastname,
+          account_email,
+          account_type: res.locals.accountData.account_type
+        },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: 3600 }
+      )
+
+      res.cookie("jwt", newToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV !== "development",
+        maxAge: 3600 * 1000
+      })
+    } else {
+      req.flash("notice", "Update failed. Please try again.")
+    }
+
+    return res.redirect("/account")
+  } catch (err) {
+    next(err)
+  }
+}
+
+/* ****************************************
+ * Update account password
+ * *************************************** */
+accountController.updatePassword = async function (req, res, next) {
+  try {
+    const { account_id, account_password } = req.body
+
+    // Prevent editing another user's password
+    if (parseInt(account_id) !== res.locals.accountData.account_id) {
+      req.flash("notice", "You can only update your own password.")
+      return res.redirect("/account")
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(account_password, 10)
+    const result = await accountModel.updatePassword(account_id, hashedPassword)
+
+    if (result) {
+      req.flash("notice", "Password updated successfully.")
+    } else {
+      req.flash("notice", "Password update failed. Try again.")
+    }
+
+    return res.redirect("/account")
+  } catch (err) {
+    next(err)
+  }
+}
+
+accountController.buildEditAccount = async function (req, res, next) {
+  try {
+    // Only allow user to edit their own account
+    if (parseInt(req.params.account_id) !== res.locals.accountData.account_id) {
+      req.flash("notice", "You can only edit your own account.");
+      return res.redirect("/account");
+    }
+
+    const nav = await utilities.getNav();
+    res.render("account/edit-account", {
+      title: "Edit Account",
+      nav,
+      account: res.locals.accountData, // logged-in user
+      message: null,
+      errors: null
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 module.exports = accountController

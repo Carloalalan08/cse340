@@ -94,27 +94,68 @@ Util.buildClassificationList = async function (classification_id = null) {
 
 /* *******************************
  * JWT Token check middleware
- ************************** */
+ ****************************** */
 Util.checkJWTToken = (req, res, next) => {
-  if (req.cookies.jwt) {
-    jwt.verify(
-      req.cookies.jwt,
-      process.env.ACCESS_TOKEN_SECRET,
-      (err, accountData) => {
-        if (err) {
-          req.flash("notice", "Please log in")
-          res.clearCookie("jwt")
-          return res.redirect("/account/login")
-        }
-        // JWT is valid → attach user data
+  const token = req.cookies.jwt
+
+  if (!token) {
+    // Guest user
+    res.locals.accountData = null
+    res.locals.loggedin = 0
+    return next()
+  }
+
+  // Token exists → verify it
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, accountData) => {
+    if (err) {
+      req.flash("notice", "Please log in")
+      res.clearCookie("jwt")
+
+      // Treat as logged out
+      res.locals.accountData = null
+      res.locals.loggedin = 0
+
+      return res.redirect("/account/login")
+    }
+
+    // Valid token → user logged in
+    res.locals.accountData = accountData
+    res.locals.loggedin = 1
+
+    next()
+  })
+}
+
+// ==============================
+//  Only Employee / Admin Allowed
+// ==============================
+Util.checkAdmin = (req, res, next) => {
+  try {
+    const token = req.cookies?.jwt
+    if (!token) {
+      req.flash('notice', 'Please log in to access that page.')
+      return res.redirect('/account/login')
+    }
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, accountData) => {
+      if (err) {
+        req.flash('notice', 'Please log in.')
+        res.clearCookie('jwt')
+        return res.redirect('/account/login')
+      }
+
+      // accountData comes from token payload at login
+      if (accountData.account_type === 'Employee' || accountData.account_type === 'Admin') {
         res.locals.accountData = accountData
         res.locals.loggedin = 1
-        next()
+        return next()
+      } else {
+        req.flash('notice', 'You do not have sufficient permissions to access that page.')
+        return res.redirect('/account/login')
       }
-    )
-  } else {
-    // No token → continue as guest
-    next()
+    })
+  } catch (err) {
+    next(err)
   }
 }
 

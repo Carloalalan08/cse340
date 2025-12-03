@@ -1,0 +1,56 @@
+<main class="account-form">
+  <h1><%= title %></h1>
+
+  <% if (message) { %>
+    <div class="message"><%= message %></div>
+  <% } %>
+
+  <% if (errors && errors.length) { %>
+    <ul class="error-list">
+      <% errors.forEach(e => { %>
+        <li><%= e.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <!-- Account Update Form -->
+  <section>
+    <h2>Account Update</h2>
+    <form id="accountUpdate" action="/account/update" method="post" novalidate>
+      <input type="hidden" name="account_id" value="<%= account.account_id %>">
+
+      <div class="form-group">
+        <label for="account_firstname">First Name</label>
+        <input id="account_firstname" name="account_firstname" required value="<%= account.account_firstname %>">
+      </div>
+
+      <div class="form-group">
+        <label for="account_lastname">Last Name</label>
+        <input id="account_lastname" name="account_lastname" required value="<%= account.account_lastname %>">
+      </div>
+
+      <div class="form-group">
+        <label for="account_email">Email</label>
+        <input id="account_email" name="account_email" type="email" required value="<%= account.account_email %>">
+      </div>
+
+      <button type="submit">Update Account</button>
+    </form>
+  </section>
+
+  <!-- Password Change Form -->
+  <section>
+    <h2>Change Password</h2>
+    <form id="passwordChange" action="/account/update-password" method="post" novalidate>
+      <input type="hidden" name="account_id" value="<%= account.account_id %>">
+
+      <div class="form-group">
+        <label for="newPassword">New Password</label>
+        <input id="newPassword" name="account_password" type="password" required minlength="8">
+        <p>Note: Password must have at least 8 characters, including letters and numbers.</p>
+      </div>
+
+      <button type="submit">Change Password</button>
+    </form>
+  </section>
+</main>

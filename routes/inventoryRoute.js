@@ -15,34 +15,6 @@ router.get(
   utilities.handleErrors(invController.buildManagement)
 )
 
-// Deliver "Add Classification" view
-router.get(
-  "/add-classification",
-  utilities.handleErrors(invController.buildAddClassification)
-)
-
-// Process classification form
-router.post(
-  "/add-classification",
-  invValidate.classificationRules(),
-  invValidate.checkClassificationData,
-  utilities.handleErrors(invController.addClassification)
-)
-
-// Deliver "Add Inventory" view
-router.get(
-  "/add-inventory",
-  utilities.handleErrors(invController.buildAddInventory)
-)
-
-// Process inventory form
-router.post(
-  "/add-inventory",
-  invValidate.inventoryRules(),
-  invValidate.checkInventoryData,
-  utilities.handleErrors(invController.addInventory)
-)
-
 // Build inventory by classification
 router.get(
   "/type/:classificationId",
@@ -61,29 +33,61 @@ router.get(
   utilities.handleErrors(invController.getInventoryJSON)
 )
 
-// Edit Inventory View
+// ===============================
+// Admin-only routes
+// ===============================
+
+// Add classification
 router.get(
-  "/edit/:inv_id",
-  utilities.handleErrors(invController.editInventoryView)
+  "/add-classification",
+  utilities.checkAdmin,
+  utilities.handleErrors(invController.buildAddClassification)
+)
+router.post(
+  "/add-classification",
+  utilities.checkAdmin,
+  invValidate.classificationRules(),
+  invValidate.checkClassificationData,
+  utilities.handleErrors(invController.addClassification)
 )
 
-// Update Inventory Handler
+// Add inventory
+router.get(
+  "/add-inventory",
+  utilities.checkAdmin,
+  utilities.handleErrors(invController.buildAddInventory)
+)
+router.post(
+  "/add-inventory",
+  utilities.checkAdmin,
+  invValidate.inventoryRules(),
+  invValidate.checkInventoryData,
+  utilities.handleErrors(invController.addInventory)
+)
+
+// Edit inventory
+router.get(
+  "/edit/:inv_id",
+  utilities.checkAdmin,
+  utilities.handleErrors(invController.editInventoryView)
+)
 router.post(
   "/update",
+  utilities.checkAdmin,
   utilities.handleErrors(invController.updateInventory)
 )
 
-// Deliver Delete Confirmation View
+// Delete inventory
 router.get(
   "/delete/:inv_id",
+  utilities.checkAdmin,
   utilities.handleErrors(invController.buildDeleteView)
-);
-
-// Process Delete
+)
 router.post(
   "/delete",
+  utilities.checkAdmin,
   utilities.handleErrors(invController.deleteInventory)
-);
+)
 
 // Test 500 error route
 router.get("/trigger-error", (req, res, next) => {
