@@ -1,4 +1,9 @@
-
 <div class="vehicle-detail">
     <%- vehicleHTML %>
 </div>
+
+<!-- Favorite Button -->
+<form action="/favorites/add" method="POST" class="favorite-form">
+    <input type="hidden" name="inv_id" value="<%= invData.inv_id %>">
+    <button type="submit" class="favorite-btn">Add to Favorites</button>
+</form>

@@ -18,6 +18,7 @@
     <div class="account-actions">
       <!-- Update Account link visible to all logged-in users -->
       <a href="/account/update/<%= accountData.account_id %>" class="cta-link">Update Account Info</a>
+      <a href="/favorites" class="cta-link">My Favorites</a>
       <a href="/account/logout" class="cta-link">Logout</a>
     </div>
 
@@ -27,6 +28,8 @@
         <p><a href="/inv">Manage Inventory</a></p>
       </div>
     <% } %>
+
+    <button onclick="history.back()" class="return-btn">⬅ Back</button>
 
   <% } else { %>
     <p>Please <a href="/account/login">log in</a> to access your account.</p>

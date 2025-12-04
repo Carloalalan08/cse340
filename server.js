@@ -21,6 +21,8 @@ const session = require("express-session")
 const flash = require("connect-flash")
 const cookieParser = require("cookie-parser")
 
+const favoritesRoute = require("./routes/favoritesRoute")
+
 /* ***********************
  * Middleware
  *************************/
@@ -86,9 +88,13 @@ app.use("/account", accountRoute)
 const port = process.env.PORT
 const host = process.env.HOST
 
+// Start server
 app.listen(port, () => {
   console.log(`app listening on ${host}:${port}`)
 })
+
+// Favorites routes
+app.use("/favorites", favoritesRoute)
 
 // 404 fallback
 app.use(async (req, res, next) => {
